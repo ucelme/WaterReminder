@@ -1,0 +1,34 @@
+PODS:
+  - AUPickerCell (1.0.2.0)
+  - CircleProgressView (1.2.0)
+  - Realm (4.4.1):
+    - Realm/Headers (= 4.4.1)
+  - Realm/Headers (4.4.1)
+  - RealmSwift (4.4.1):
+    - Realm (= 4.4.1)
+  - SwiftyStoreKit (0.16.1)
+
+DEPENDENCIES:
+  - AUPickerCell
+  - CircleProgressView (~> 1.0)
+  - RealmSwift (~> 4.4.1)
+  - SwiftyStoreKit
+
+SPEC REPOS:
+  trunk:
+    - AUPickerCell
+    - CircleProgressView
+    - Realm
+    - RealmSwift
+    - SwiftyStoreKit
+
+SPEC CHECKSUMS:
+  AUPickerCell: b6f788d62f449014204776ff6fdc841aebbc352f
+  CircleProgressView: 6b5b091d59dc5e5d2fda84e637a40498cdc39937
+  Realm: 4eb04d7487bd43c0581256f40b424eafb711deff
+  RealmSwift: 3eb8924ff7100df5928c7602f71d0fec51e7c9c5
+  SwiftyStoreKit: 6b9c08810269f030586dac1fae8e75871a82e84a
+
+PODFILE CHECKSUM: 4a35635187adbefade77769e75f5a943027a7b85
+
+COCOAPODS: 1.10.0
