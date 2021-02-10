@@ -57,24 +57,7 @@ class DailyGoalController: UITableViewController, AUPickerCellDelegate {
             waterGoalArray.append("\(item) ml")
         }
     }
-    
-    @IBAction func cancelButtonTapped(_ sender: UIBarButtonItem) {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
-        let item = Water()
-        item.dailyGoal = dailyGoal
-        item.restoToDrink = dailyGoal
-
-        try! realm.write {
-            realm.add(item)
-        }
-
-        dismiss(animated: true, completion: nil)
-        NotificationCenter.default.post(name: Notification.Name("Goal"), object: nil)
-    }
-    
+            
     override func numberOfSections(in tableView: UITableView) -> Int {
         if !automaticCounting {
             return 2
@@ -167,11 +150,19 @@ class DailyGoalController: UITableViewController, AUPickerCellDelegate {
         
         if !cell.switch.isOn {
             dailyGoal = Int(itemManual)!
+            UserDefaults.standard.set(dailyGoal, forKey: "dailyGoalValue")
+            UserDefaults.standard.set(dailyGoal, forKey: "restToDrinkValue")
         } else {
             if gender == "Male" {
                 dailyGoal = Int((Double(itemWeight)! * 0.03 + Double(itemActivity)! * 0.5) * 1000)
+                UserDefaults.standard.set(dailyGoal, forKey: "dailyGoalValue")
+                UserDefaults.standard.set(dailyGoal, forKey: "restToDrinkValue")
+
             } else {
                 dailyGoal = Int((Double(itemWeight)! * 0.025 + Double(itemActivity)! * 0.4) * 1000)
+                UserDefaults.standard.set(dailyGoal, forKey: "dailyGoalValue")
+                UserDefaults.standard.set(dailyGoal, forKey: "restToDrinkValue")
+
             }
         }
         

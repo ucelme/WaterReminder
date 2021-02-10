@@ -17,7 +17,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     var restToDrinkValue = 2000
     var drinkedValue = 250
     var totalDrinked = 0
-
+    
     @IBOutlet weak var circleProgressView: CircleProgressView!
     @IBOutlet weak var progressLabel: UILabel!
     @IBOutlet weak var dailyGoal: UILabel!
@@ -25,27 +25,33 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     @IBOutlet weak var dayLabel: UILabel!
     
     let numberFormatter = NumberFormatter()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+                
+        numberFormatter.numberStyle = .percent
+                
+        createArrays()
         
+        progressLabel.text = numberFormatter.string(from: NSNumber(value: self.circleProgressView.progress))!
+                
+        drinks = realm.objects(Water.self)
+        
+        dayLabel.text = Date.dateToString(Date())()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        circleProgressView.progress = 0
+        progressLabel.text = "0%"
+
         drinkedCount = UserDefaults.standard.integer(forKey: "drinkedCount")
         dailyGoalValue = UserDefaults.standard.integer(forKey: "dailyGoalValue")
         restToDrinkValue = UserDefaults.standard.integer(forKey: "restToDrinkValue")
 
-        numberFormatter.numberStyle = .percent
-        
-        circleProgressView.progress = 0
-        
-        createArrays()
-        
-        progressLabel.text = numberFormatter.string(from: NSNumber(value: self.circleProgressView.progress))!
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(goal), name: Notification.Name("Goal"), object: nil)
-        
-        drinks = realm.objects(Water.self)
-        
-        dayLabel.text = Date.dateToString(Date())()
+        dailyGoal.text = "\(dailyGoalValue) ml"
+        restToDrink.text = "\(dailyGoalValue) ml"
+        restToDrinkValue = dailyGoalValue
+
     }
     
     func createArrays() {
@@ -64,20 +70,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         dailyGoalValue = goal
         restToDrinkValue = goal
     }
-    
-    @objc func goal() {
-        circleProgressView.progress = 0
-        progressLabel.text = "0%"
-        let goal = realm.objects(Water.self).last!.dailyGoal
-        dailyGoal.text = "\(String(describing: goal)) ml"
-        restToDrink.text = "\(String(describing: goal)) ml"
-        dailyGoalValue = goal
-        restToDrinkValue = goal
-        UserDefaults.standard.set(dailyGoalValue, forKey: "dailyGoalValue")
-        UserDefaults.standard.set(restToDrinkValue, forKey: "restToDrinkValue")
-
-    }
-
+        
     @IBAction func dailyGoal(_ sender: UITapGestureRecognizer) {
         print(1)
     }
@@ -96,7 +89,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         UIView.transition(with: self.view, duration: 0.25, options: [.curveEaseIn], animations: {
             self.view.addSubview(self.picker)
         }, completion: nil)
-
+        
         toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 50))
         toolBar.isTranslucent = true
         
@@ -104,7 +97,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelClick))
         toolBar.setItems([doneButton, spaceButton, cancelButton], animated: false)
-
+        
         self.view.addSubview(toolBar)
     }
     
@@ -136,7 +129,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         toolBar.removeFromSuperview()
         picker.removeFromSuperview()
     }
-
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -144,11 +137,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return volumes.count
     }
-        
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         volumes[row].description
     }
-        
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         drinkedValue = volumes[row]
     }
@@ -158,7 +151,5 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         let delayTime = DispatchTime.now() + delay
         DispatchQueue.main.asyncAfter(deadline: delayTime, execute: closure)
     }
-
-
 }
 
