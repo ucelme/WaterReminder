@@ -63,12 +63,14 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     @IBAction func resetClicked(_ sender: UIButton) {
         circleProgressView.progress = 0
         progressLabel.text = "0%"
-        let goal = realm.objects(Water.self).last!.dailyGoal
-        dailyGoal.text = "\(String(describing: goal)) ml"
-        restToDrink.text = "\(String(describing: goal)) ml"
+        
+        dailyGoalValue = UserDefaults.standard.integer(forKey: "dailyGoalValue")
+
+        dailyGoal.text = "\(dailyGoalValue) ml"
+        restToDrink.text = "\(dailyGoalValue) ml"
+        
         totalDrinked = 0
-        dailyGoalValue = goal
-        restToDrinkValue = goal
+        restToDrinkValue = dailyGoalValue
     }
         
     @IBAction func dailyGoal(_ sender: UITapGestureRecognizer) {
